@@ -46,8 +46,9 @@ class ContractDiscovery(Discovery):
             discovery_contract_address.encode('hex'),
         )
 
-    # Here nodeid is implicit hence not mentioned,please suggest if any correction to match above Discovery class API
-    def register(self, host, port):
+    def register(self, nodeid, host, port):
+        if nodeid is not None:
+            raise ValueError("The nodeid has to be None")
         self.discovery_proxy.registerEndpoint(''.join([host, ':', port]))
 
     def get(self, nodeid):

@@ -40,14 +40,15 @@ def test_endpointregistry():
 @pytest.mark.parametrize('poll_timeout', [60])
 def test_discovery_contract(discovery_blockchain):
     contract_discovery_instance, address = discovery_blockchain
+    nodeid = None
     assert isinstance(contract_discovery_instance, ContractDiscovery)
-    contract_discovery_instance.register('127.0.0.1', '4001')
+    contract_discovery_instance.register(nodeid, '127.0.0.1', '4001')
     gevent.sleep(30)  # FIXME: this should not be necessary!
     assert contract_discovery_instance.nodeid_by_host_port('127.0.0.1:4001') == address.encode('hex')
     gevent.sleep(30)
     assert contract_discovery_instance.get(address) == '127.0.0.1:4001'
     gevent.sleep(30)
-    contract_discovery_instance.register('192.168.0.1', '4002')
+    contract_discovery_instance.register(nodeid, '192.168.0.1', '4002')
     gevent.sleep(30)
     assert contract_discovery_instance.nodeid_by_host_port('192.168.0.1:4002') == address.encode('hex')
     gevent.sleep(30)
