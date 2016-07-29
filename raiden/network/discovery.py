@@ -39,20 +39,19 @@ class ContractDiscovery(Discovery):
     """
     This is the place where ethereum addresses are registered to their network sockets
     """
+
     def __init__(self, rpc_client, discovery_contract_address):
         self.discovery_proxy = rpc_client.new_abi_contract(
             DISCOVERY_CONTRACT_ABI,
             discovery_contract_address.encode('hex'),
         )
 
-    def register_endpoint(self, host, port):
+    # Here nodeid is implicit hence not mentioned,please suggest if any correction to match above Discovery class API
+    def register(self, host, port):
         self.discovery_proxy.registerEndpoint(''.join([host, ':', port]))
 
-    def update_endpoint(self, host, port):
-        self.discovery_proxy.updateEndpoint(''.join([host, ':', port]))
-
-    def find_endpoint(self, nodeid):
+    def get(self, nodeid):
         return self.discovery_proxy.findEndpointByAddress(nodeid.encode('hex'))
 
-    def find_address(self, host, port):
-        return self.discovery_proxy.findAddressByEndpoint(''.join([host, ':', port]))
+    def nodeid_by_host_port(self, host_port):
+        return self.discovery_proxy.findAddressByEndpoint(host_port)
